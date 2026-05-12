@@ -29,7 +29,7 @@ const ResetPassword = () => {
         setMessage('');
         setError('');
         try {
-            const res = await api.post('/reset-password', form);
+            const res = await api.post('/auth/reset-password', form);
             setMessage(res.data.message);
             setTimeout(() => navigate('/login'), 3000);
         } catch (err) {

@@ -120,7 +120,7 @@ const Dashboard = ({ setAuth }) => {
     const fetchData = async () => {
         try {
             const [userRes, profileRes] = await Promise.all([
-                api.get('/user'),
+                api.get('/auth/user'),
                 api.get('/profile')
             ]);
             setUser(userRes.data);
@@ -136,8 +136,8 @@ const Dashboard = ({ setAuth }) => {
                 setDetails(prev => ({ ...prev, ...cleanDetails }));
                 
                 setPreviews({
-                    ktp_image: profileRes.data.details.ktp_image ? `https://sagansa.id/storage/${profileRes.data.details.ktp_image}` : null,
-                    selfie_image: profileRes.data.details.selfie_image ? `https://sagansa.id/storage/${profileRes.data.details.selfie_image}` : null,
+                    ktp_image: profileRes.data.details.ktp_image_url,
+                    selfie_image: profileRes.data.details.selfie_image_url,
                 });
             }
             setExperiences(profileRes.data.experiences);
@@ -151,7 +151,7 @@ const Dashboard = ({ setAuth }) => {
     const handleResendVerification = async () => {
         setResendLoading(true);
         try {
-            const res = await api.post('/email/resend');
+            const res = await api.post('/auth/email/resend');
             showNotification(t('verification.resend_success'));
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to resend.');
@@ -247,8 +247,8 @@ const Dashboard = ({ setAuth }) => {
                 setFiles({ ktp_image: null, selfie_image: null });
                 if (res.data.details) {
                     setPreviews({
-                        ktp_image: res.data.details.ktp_image ? `https://sagansa.id/storage/${res.data.details.ktp_image}` : previews.ktp_image,
-                        selfie_image: res.data.details.selfie_image ? `https://sagansa.id/storage/${res.data.details.selfie_image}` : previews.selfie_image,
+                        ktp_image: res.data.details.ktp_image_url,
+                        selfie_image: res.data.details.selfie_image_url,
                     });
                 }
             }

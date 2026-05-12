@@ -29,8 +29,9 @@ const Register = ({ setAuth }) => {
         e.preventDefault();
         setError('');
         try {
-            const response = await api.post('/register', formData);
+            const response = await api.post('/auth/register', formData);
             localStorage.setItem('token', response.data.access_token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
             setAuth(true);
             navigate('/dashboard');
         } catch (err) {

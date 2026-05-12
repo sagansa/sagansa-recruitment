@@ -15,8 +15,9 @@ const Login = ({ setAuth }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/login', { email, password });
+            const response = await api.post('/auth/login', { email, password });
             localStorage.setItem('token', response.data.access_token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
             setAuth(true);
             navigate('/dashboard');
         } catch (err) {
