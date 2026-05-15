@@ -29,6 +29,7 @@ const VerifyEmailConfirm = () => {
                 // Refresh user data in localStorage
                 const userRes = await api.get('/auth/user');
                 localStorage.setItem('user', JSON.stringify(userRes.data.user));
+                window.dispatchEvent(new Event('storage'));
 
                 setTimeout(() => navigate('/dashboard'), 3000);
             } catch (err) {

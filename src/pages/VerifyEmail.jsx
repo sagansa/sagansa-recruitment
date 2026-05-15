@@ -25,6 +25,7 @@ const VerifyEmail = ({ setAuth }) => {
                 const response = await api.get('/auth/user');
                 if (response.data.user.email_verified_at) {
                     localStorage.setItem('user', JSON.stringify(response.data.user));
+                    window.dispatchEvent(new Event('storage'));
                     clearInterval(pollInterval);
                     navigate('/dashboard');
                 }
