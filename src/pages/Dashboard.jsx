@@ -115,7 +115,28 @@ const Dashboard = ({ setAuth }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+
+        // Poll for verification status every 10 seconds if not verified
+        let pollInterval;
+        if (!isVerified) {
+            pollInterval = setInterval(async () => {
+                try {
+                    const res = await api.get('/auth/user');
+                    if (res.data.user.email_verified_at) {
+                        setUser(res.data.user);
+                        localStorage.setItem('user', JSON.stringify(res.data.user));
+                        clearInterval(pollInterval);
+                    }
+                } catch (err) {
+                    console.error("Verification polling failed", err);
+                }
+            }, 10000);
+        }
+
+        return () => {
+            if (pollInterval) clearInterval(pollInterval);
+        };
+    }, [isVerified]);
 
     const fetchData = async () => {
         try {
@@ -123,7 +144,7 @@ const Dashboard = ({ setAuth }) => {
                 api.get('/auth/user'),
                 api.get('/profile')
             ]);
-            setUser(userRes.data);
+            setUser(userRes.data.user);
             if (profileRes.data.details) {
                 const cleanDetails = {};
                 Object.keys(profileRes.data.details).forEach(key => {

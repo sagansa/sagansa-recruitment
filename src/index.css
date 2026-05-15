@@ -30,3 +30,19 @@
     @apply bg-linear-to-r from-gold to-[#D4B97C] bg-clip-text text-transparent;
   }
 }
+
+/* Custom Autofill Styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1A1A1A inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: #C6A96B !important;
+}
+
+input:autofill {
+    background-color: #1A1A1A !important;
+    color: #ffffff !important;
+}

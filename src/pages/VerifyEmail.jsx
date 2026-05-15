@@ -16,8 +16,25 @@ const VerifyEmail = ({ setAuth }) => {
     useEffect(() => {
         if (user.email_verified_at) {
             navigate('/dashboard');
+            return;
         }
-    }, [user, navigate]);
+
+        // Poll for verification status every 3 seconds
+        const pollInterval = setInterval(async () => {
+            try {
+                const response = await api.get('/auth/user');
+                if (response.data.user.email_verified_at) {
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+                    clearInterval(pollInterval);
+                    navigate('/dashboard');
+                }
+            } catch (err) {
+                console.error("Polling failed", err);
+            }
+        }, 3000);
+
+        return () => clearInterval(pollInterval);
+    }, [user.email_verified_at, navigate]);
 
     const handleResend = async () => {
         setLoading(true);
